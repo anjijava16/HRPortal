@@ -10,7 +10,6 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.iwinner.belk.hrportal.exceptions.ServiceException;
@@ -18,6 +17,7 @@ import com.iwinner.belk.hrportal.form.EmployeePrimaryVO;
 import com.iwinner.belk.hrportal.helper.HRPortalConstants;
 import com.iwinner.belk.hrportal.helper.PasswordEncoder;
 import com.iwinner.belk.hrportal.service.EmployeeServiceIF;
+import com.iwinner.belk.hrportal.service.LoginServiceIF;
 import com.iwinner.belk.hrportal.service.ValidationServiceIF;
 
 @Controller
@@ -28,6 +28,10 @@ public class LoginController {
    
 	@Autowired
 	private EmployeeServiceIF employeeServiceIF;
+
+	@Autowired
+	private LoginServiceIF loginServiceIF;
+	
 	
 	@RequestMapping(value = "loginVerification.action")
 	public String loginVerification(HttpServletRequest request) {
@@ -99,7 +103,32 @@ public String passwordChange(HttpServletRequest request){
 }
 
 @RequestMapping("passwordUpdate.action")
-public String passwordUpdate(HttpServletRequest requst){
+public String passwordUpdate(HttpServletRequest request){
+	String password=request.getParameter("currentpwd");
+	String newPassword=request.getParameter("newpwd");
+	String confirmPassword=request.getParameter("confirmpwd");
+	if(!newPassword.equals(confirmPassword)){
+		request.setAttribute("pmessage", "Please enter newpassword and confirm password equal");
+		return "ChangePwd";
+	}
+	try {
+		Integer id=loginServiceIF.passwordUpdate((String)request.getSession().getAttribute("username"), PasswordEncoder.encodePassword(password), PasswordEncoder.encodePassword(confirmPassword));
+		if(id==HRPortalConstants.PASSWORD_CHANGED_SUCCESS){
+			request.setAttribute("pmessage", "Password Changed successfully");
+			return "profileFinal";
+		}else if(id==HRPortalConstants.CURRENT_PASSWORD_INCORRECT){
+			request.setAttribute("pmessage", "Your current password is incorrect,Please enter correct password");
+			return "ChangePwd";
+		}else if(id==HRPortalConstants.PASSWORD_CHANGED_ERROR){
+			request.setAttribute("pmessage", "Error occur,please contact system admin");
+			return "ChangePwd";
+		}else if(id==HRPortalConstants.PASSWORD_USED_BEFORE){
+			request.setAttribute("pmessage", "Password alredy exist ,Please use another password");
+			return "ChangePwd";
+		}
+	} catch (ServiceException e) {
+		e.printStackTrace();
+	}
 	return "";
 }
 

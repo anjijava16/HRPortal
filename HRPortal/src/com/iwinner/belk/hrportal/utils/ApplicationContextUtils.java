@@ -66,7 +66,8 @@ public class ApplicationContextUtils {
 	public static void main(String[] args) {
 		ApplicationContext context=new ClassPathXmlApplicationContext("beans.xml");
 		EmployeeDaoIF empolyeeDaoIF=(EmployeeDaoIF)context.getBean("loginDao");
-		try {
+		System.out.println(PasswordEncoder.encodePassword("12345"));
+/*		try {
         LoginDaoIF login=(LoginDaoIF)context.getBean("loginDaoImpl");
         Integer id=login.passwordUpdate("anjaiahspr", PasswordEncoder.encodePassword("anji"), PasswordEncoder.encodePassword("anjaiahspr"));
         System.out.println("PasswordEncorder::>>>>>>>>"+id);
@@ -74,7 +75,7 @@ public class ApplicationContextUtils {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+*/		
 				
       }
 	

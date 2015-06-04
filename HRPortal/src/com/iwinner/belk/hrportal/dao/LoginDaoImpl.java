@@ -226,7 +226,14 @@ public class LoginDaoImpl implements LoginDaoIF {
 		  if(currentPasswordChecking(username,currentpassword)){
 			JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 			List<UserDTO> userInfo=listOfPastPassword(username);
-			if(userInfo.contains(currentpassword)){
+			List<String>listOfPasswords=new ArrayList<String>();
+			for(UserDTO uD:userInfo){
+				listOfPasswords.add(uD.getPassword());
+				listOfPasswords.add(uD.getPastPasswordOne());
+				listOfPasswords.add(uD.getPastPasswordTwo());
+				listOfPasswords.add(uD.getPastPasswordThree());
+			}
+			if(listOfPasswords.contains(newPassword)){
 				passwordId=HRPortalConstants.PASSWORD_USED_BEFORE;		
 			}else{
 				if(updatePasswordDetails(username)){

@@ -2,6 +2,7 @@ package com.iwinner.belk.hrportal.dao;
 
 import java.util.List;
 
+
 import javax.sql.DataSource;
 
 import org.apache.log4j.Logger;
@@ -107,7 +108,7 @@ public class EmployeeDaoImpl implements EmployeeDaoIF {
 				employeeDTO=empD;
 			}
 		} catch (Exception e) {
-			LOGGER.error("getEmployeePersonalDetails  failed " + e.getMessage());
+			LOGGER.error("getEmployeeHrEFillDetails  failed " + e.getMessage());
 			throw new DaoException(e);
 		}
 		return employeeDTO;

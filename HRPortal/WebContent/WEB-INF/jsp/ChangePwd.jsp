@@ -1,33 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<%
-	String id = request.getParameter("eid");
-	
-%>
-
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Change Password</title>
-<script language="javascript">
-
-function check(eid)
-{
-   if ( cpwd.newpwd.value !=  cpwd.confirmpwd.value )
-   {
-         alert("New password and confirm password are not matching.");
-         document.cpwd.confirmpwd.focus();
-         return false;
-   }
-   document.getElementById('eid').value = eid;	
-   return true;
-}
-
-</script>
 </head>
 <body bgcolor="#ffcc99"><!-- <img src="img/h_logo.jpeg" border="3" width="100%" height="25%"> -->
-<form name="cpwd" action="/hrp/servlet/CheckPwdServlet" onsubmit="return check('<%=id%>')">
+<form name="cpwd" action="passwordUpdate.action" method="post">
 <br /><br />
 <h2 align="center">CHANGE PASSWORD</h2>
 <input type="hidden" name="eid" id="eid">
@@ -59,8 +38,8 @@ function check(eid)
 </tr>
 </table>
 <center>
-<%if(request.getParameter("Msg")!=null)
-			{out.println(request.getParameter("Msg"));}%></center><br>
+<%if(request.getAttribute("pmessage")!=null)
+			{out.println(request.getAttribute("pmessage"));}%></center><br>
 </form>
 </body>
 </html>
